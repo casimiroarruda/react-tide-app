@@ -290,3 +290,41 @@ pnpm typecheck && pnpm lint && pnpm test && pnpm build
 - Não editar `src/components/ui/`
 - Não commitar `.env` ou credenciais
 - Não chamar a Tide API diretamente — sempre via BFF
+
+## 2.1 12-Factor App
+
+Este projeto segue os princípios do 12-factor app (12factor.net).
+Os fatores mais relevantes para este contexto:
+
+**III. Config — armazene config no ambiente**
+- NUNCA hardcode URLs, ports, credenciais ou qualquer valor que difere entre
+  ambientes (dev, staging, prod)
+- React (Vite): variáveis expostas ao browser obrigatoriamente prefixadas com
+  `VITE_` e lidas via `import.meta.env.VITE_*`
+- BFF (Go): variáveis lidas via `os.Getenv()` — nunca valores default de prod
+  embutidos no código
+- `.env.example` sempre atualizado e commitado; `.env` sempre no `.gitignore`
+
+**IV. Backing services — trate serviços como recursos anexados**
+- O BFF é um recurso anexado ao app — acessado via `VITE_BFF_URL`
+- A Tide API é um recurso anexado ao BFF — acessado via `TIDE_API_BASE_URL`
+- Trocar de ambiente = trocar variável de ambiente, sem alteração de código
+
+**X. Dev/prod parity — mantenha dev e prod o mais similares possível**
+- docker-compose em dev usa as mesmas imagens que prod
+- Sem lógica condicional `if (dev)` no código de aplicação
+
+**Variáveis de ambiente do app (Vite/React):**
+| Variável        | Descrição                  | Exemplo                    |
+|-----------------|----------------------------|----------------------------|
+| VITE_BFF_URL    | URL base do BFF            | http://localhost:3001      |
+
+**Variáveis de ambiente do BFF (Go):**
+| Variável            | Descrição                        |
+|---------------------|----------------------------------|
+| TIDE_API_BASE_URL   | URL base da Tide API             |
+| TIDE_CLIENT_ID      | Client ID para auth              |
+| TIDE_CLIENT_SECRET  | Client Secret para auth          |
+| BFF_PORT            | Porta do servidor BFF            |
+| FRONTEND_ORIGIN     | Origem permitida no CORS         |
+| RATE_LIMIT_RPM      | Rate limit por IP (req/min)      |

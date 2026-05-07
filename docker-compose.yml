@@ -20,3 +20,5 @@ services:
       - bff
     environment:
       - VITE_BFF_URL=http://bff:3001
+    env_file:
+      - .env

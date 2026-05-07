@@ -1,9 +1,11 @@
-import { defineConfig } from 'vite'
+/// <reference types="vitest" />
+import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import path from 'path'
 
 export default defineConfig({
+  envDir: '../',
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {
@@ -26,7 +28,7 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html'],
-      include: ['src/api/**', 'src/utils/**'],
+      include: ['src/api/**', 'src/utils/**', 'src/components/**'],
       thresholds: { lines: 80, functions: 80 },
     },
   },
