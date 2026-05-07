@@ -1,0 +1,22 @@
+services:
+  bff:
+    build: ./bff
+    ports:
+      - "3001:3001"
+    environment:
+      - TIDE_API_BASE_URL=${TIDE_API_BASE_URL:-http://host.docker.internal:8080}
+      - TIDE_CLIENT_ID=${TIDE_CLIENT_ID}
+      - TIDE_CLIENT_SECRET=${TIDE_CLIENT_SECRET}
+      - BFF_PORT=3001
+      - FRONTEND_ORIGIN=http://localhost:5173
+    env_file:
+      - .env
+
+  app:
+    build: ./app
+    ports:
+      - "5173:5173"
+    depends_on:
+      - bff
+    environment:
+      - VITE_BFF_URL=http://bff:3001

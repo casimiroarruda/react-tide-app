@@ -1,0 +1,18 @@
+# Deps
+node_modules/
+.pnpm-store/
+
+# Build
+dist/
+build/
+
+# Env (NUNCA commitar credenciais)
+.env
+.env.*
+!.env.example
+
+# Go
+bff/mareviva-bff
+
+# OS
+.DS_Store
