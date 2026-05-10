@@ -5,7 +5,7 @@
 import { http, HttpResponse } from 'msw'
 import type { Location, Tide } from '@/types/api'
 
-const BFF_URL = 'http://localhost:3001'
+
 
 // ---------------------------------------------------------------------------
 // Fixtures reutilizáveis nos testes
@@ -43,7 +43,7 @@ export const MOCK_TIDES: Tide[] = [
 
 export const handlers = [
     // GET /locations?lat=&lon= ou ?name=
-    http.get(`${BFF_URL}/locations`, ({ request }) => {
+    http.get(`*/locations`, ({ request }) => {
         const url = new URL(request.url)
         const name = url.searchParams.get('name')
 
@@ -59,7 +59,7 @@ export const handlers = [
     }),
 
     // GET /tides/{locationId}/{day}
-    http.get(`${BFF_URL}/tides/:locationId/:day`, ({ params }) => {
+    http.get(`*/tides/:locationId/:day`, ({ params }) => {
         const { locationId } = params
 
         // Location desconhecida → array vazio (sem dados)
