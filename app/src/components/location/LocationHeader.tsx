@@ -1,5 +1,7 @@
 // src/components/location/LocationHeader.tsx
-import { MapPin } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+import { MapPin, ChevronDown } from 'lucide-react'
+import { Logo } from '@/components/brand/Logo'
 import type { Location } from '@/types/api'
 
 interface LocationHeaderProps {
@@ -7,26 +9,35 @@ interface LocationHeaderProps {
     loading?: boolean
 }
 
-/**
- * Header que exibe o nome da localidade selecionada.
- * Design: 20px / 600 / text-primary
- */
 export function LocationHeader({ location, loading }: LocationHeaderProps) {
-    if (loading) {
-        return (
-            <div className="flex items-center gap-2 animate-pulse py-4 px-6">
-                <div className="w-5 h-5 bg-muted rounded-full" />
-                <div className="h-6 w-48 bg-muted rounded" />
-            </div>
-        )
-    }
+    const navigate = useNavigate()
 
     return (
-        <header className="flex items-center gap-2 py-4 px-6 bg-transparent">
-            <MapPin className="w-5 h-5 text-[var(--color-primary)]" />
-            <h1 className="text-[20px] font-semibold text-[var(--color-text-primary)] truncate">
-                {location?.name || 'Selecione uma localidade'}
-            </h1>
+        <header className="flex items-center justify-between py-3 px-4 bg-transparent">
+            {/* Logo à esquerda */}
+            <Logo variant="full" size="sm" />
+
+            {/* Localidade clicável à direita */}
+            {loading ? (
+                <div className="flex items-center gap-1.5 animate-pulse">
+                    <div className="w-4 h-4 bg-gray-200 rounded-full" />
+                    <div className="h-5 w-36 bg-gray-200 rounded" />
+                </div>
+            ) : (
+                <button
+                    type="button"
+                    onClick={() => navigate('/locais')}
+                    className="flex items-center gap-1.5 max-w-[55%] rounded-lg px-2 py-1
+                     hover:bg-gray-100 active:bg-gray-200 transition-colors"
+                    aria-label="Trocar localidade"
+                >
+                    <MapPin className="w-4 h-4 shrink-0 text-[var(--color-primary)]" />
+                    <span className="text-[13px] font-semibold text-[var(--color-text-primary)] truncate">
+                        {location?.name ?? 'Selecione uma localidade'}
+                    </span>
+                    <ChevronDown className="w-3.5 h-3.5 shrink-0 text-[var(--color-text-muted)]" />
+                </button>
+            )}
         </header>
     )
 }

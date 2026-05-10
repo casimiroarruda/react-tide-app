@@ -50,7 +50,7 @@ export function DashboardPage() {
     const coords = selectedLocation ? parseGeoPoint(selectedLocation.point) : null
 
     return (
-        <main className="max-w-md mx-auto min-h-screen pb-20 flex flex-col bg-[var(--color-bg-page)] shadow-2xl">
+        <main className="max-w-md mx-auto min-h-screen pb-20 lg:pb-6 flex flex-col bg-[var(--color-bg-page)] shadow-2xl">
             <LocationHeader
                 location={selectedLocation ?? undefined}
                 loading={isInitializing}

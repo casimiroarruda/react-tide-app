@@ -50,9 +50,9 @@ export function LocalesPage() {
     }, [nearbyLocations, handleSelect])
 
     return (
-        <main className="max-w-md mx-auto min-h-screen pb-20 flex flex-col bg-[var(--color-bg-page)]">
+        <main className="max-w-md lg:max-w-none lg:pb-6 mx-auto min-h-screen pb-20 flex flex-col bg-[var(--color-bg-page)]">
             {/* Header */}
-            <div className="px-4 pt-12 pb-4">
+            <div className="px-4 pt-12 lg:pt-6 pb-4">
                 <h1 className="text-xl font-semibold text-[var(--color-text-primary)] mb-4">
                     Localidades
                 </h1>

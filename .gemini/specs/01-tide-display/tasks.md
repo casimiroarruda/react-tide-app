@@ -35,6 +35,7 @@
 - [x] `src/hooks/useLocationSearch.ts`
 - [x] `src/hooks/useTides.ts`
 - [x] `src/hooks/useTideState.ts`
+- [x] `src/hooks/useLocationContext.ts`
 - [x] `src/lib/queryClient.ts`
 - [x] Gate: `pnpm typecheck`
 
@@ -54,3 +55,8 @@
 - [x] TideTable com dados mockados
 - [x] DateNavigator com navegação
 - [x] Gate: `pnpm test --coverage` ≥ 80%
+
+## Task 4 — Layout mobile de eventos (backlog)
+- [x] Em viewport mobile (< 640px), `TideEventCard` exibe lista vertical
+- [x] Em desktop/tablet mantém o layout vertical (decisão de design simplificada)
+- [x] Gate: `pnpm typecheck && pnpm test`

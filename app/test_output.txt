@@ -1,0 +1,193 @@
+$ vitest run --run
+
+ RUN  v4.1.5 /home/andr/Code/frontend/tide-app/app
+
+ ✓ src/utils/date.test.ts (17 tests) 60ms
+ ✓ src/utils/tide.test.ts (23 tests) 45ms
+ ✓ src/api/tides.test.ts (5 tests) 161ms
+ ✓ src/api/locations.test.ts (7 tests) 142ms
+ ✓ src/components/navigation/DateNavigator.test.tsx (3 tests) 595ms
+     ✓ deve renderizar os chips de data para os próximos 7 dias  503ms
+ ❯ src/components/tide/TideTable.test.tsx (4 tests | 2 failed) 686ms
+     × deve exibir o estado de carregamento 442ms
+     ✓ deve exibir mensagem de erro 47ms
+     ✓ deve exibir estado vazio quando não há marés 28ms
+     × deve renderizar a lista de marés com sucesso 154ms
+ ✓ src/pages/LocalesPage.test.tsx (2 tests) 221ms
+ ✓ src/utils/geo.test.ts (11 tests) 16ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/components/tide/TideTable.test.tsx > TideTable > deve exibir o estado de carregamento
+AssertionError: expected 0 to be greater than or equal to 4
+ ❯ src/components/tide/TideTable.test.tsx:18:34
+     16|         // Como não têm texto, podemos buscar pelo container ou classes
+     17|         const skeletons = screen.getAllByRole('generic').filter(el => …
+     18|         expect(skeletons.length).toBeGreaterThanOrEqual(4)
+       |                                  ^
+     19|     })
+     20|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  src/components/tide/TideTable.test.tsx > TideTable > deve renderizar a lista de marés com sucesso
+TestingLibraryElementError: Unable to find an element with the text: /0\.20\s?m/. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+Ignored nodes: comments, script, style
+[36m<body>[39m
+  [36m<div>[39m
+    [36m<section>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"px-4 pt-4 pb-2"[39m
+      [36m>[39m
+        [36m<h2[39m
+          [33mclass[39m=[32m"text-[11px] font-medium text-[var(--color-text-muted)] uppercase tracking-[0.15em]"[39m
+        [36m>[39m
+          [0mEventos do Dia[0m
+        [36m</h2>[39m
+      [36m</div>[39m
+      [36m<div[39m
+        [33mclass[39m=[32m"flex flex-col gap-2 px-4 pb-2"[39m
+      [36m>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"flex items-center gap-3 px-4 py-3.5 rounded-xl border transition-colors bg-white border-gray-100 hover:border-gray-200"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"flex items-center gap-2 w-[72px] shrink-0"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"flex items-center justify-center w-7 h-7 rounded-full shrink-0 bg-gray-100 text-[var(--color-text-secondary)]"[39m
+            [36m>[39m
+              [36m<svg[39m
+                [33maria-hidden[39m=[32m"true"[39m
+                [33mclass[39m=[32m"lucide lucide-arrow-down w-3.5 h-3.5"[39m
+                [33mfill[39m=[32m"none"[39m
+                [33mheight[39m=[32m"24"[39m
+                [33mstroke[39m=[32m"currentColor"[39m
+                [33mstroke-linecap[39m=[32m"round"[39m
+                [33mstroke-linejoin[39m=[32m"round"[39m
+                [33mstroke-width[39m=[32m"2"[39m
+                [33mviewBox[39m=[32m"0 0 24 24"[39m
+                [33mwidth[39m=[32m"24"[39m
+                [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+              [36m>[39m
+                [36m<path[39m
+                  [33md[39m=[32m"M12 5v14"[39m
+                [36m/>[39m
+                [36m<path[39m
+                  [33md[39m=[32m"m19 12-7 7-7-7"[39m
+                [36m/>[39m
+              [36m</svg>[39m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"text-[11px] font-bold text-[var(--color-text-muted)] uppercase tracking-widest"[39m
+            [36m>[39m
+              [0mBaixa[0m
+            [36m</span>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"flex-1 text-[20px] font-bold text-[var(--color-text-primary)] tabular-nums"[39m
+          [36m>[39m
+            [0m0.20[0m
+            [36m<span[39m
+              [33mclass[39m=[32m"text-sm font-medium text-[var(--color-text-secondary)] ml-0.5"[39m
+            [36m>[39m
+              [0mm[0m
+            [36m</span>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"flex flex-col items-end gap-1 shrink-0"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"text-[14px] font-semibold text-[var(--color-text-primary)] tabular-nums"[39m
+            [36m>[39m
+              [0m04:00[0m
+            [36m</span>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+        [36m<div[39m
+          [33mclass[39m=[32m"flex items-center gap-3 px-4 py-3.5 rounded-xl border transition-colors bg-[var(--color-primary-light)] border-[var(--color-primary)]"[39m
+        [36m>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"flex items-center gap-2 w-[72px] shrink-0"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"flex items-center justify-center w-7 h-7 rounded-full shrink-0 bg-[var(--color-primary-light)] text-[var(--color-primary)]"[39m
+            [36m>[39m
+              [36m<svg[39m
+                [33maria-hidden[39m=[32m"true"[39m
+                [33mclass[39m=[32m"lucide lucide-arrow-up w-3.5 h-3.5"[39m
+                [33mfill[39m=[32m"none"[39m
+                [33mheight[39m=[32m"24"[39m
+                [33mstroke[39m=[32m"currentColor"[39m
+                [33mstroke-linecap[39m=[32m"round"[39m
+                [33mstroke-linejoin[39m=[32m"round"[39m
+                [33mstroke-width[39m=[32m"2"[39m
+                [33mviewBox[39m=[32m"0 0 24 24"[39m
+                [33mwidth[39m=[32m"24"[39m
+                [33mxmlns[39m=[32m"http://www.w3.org/2000/svg"[39m
+              [36m>[39m
+                [36m<path[39m
+                  [33md[39m=[32m"m5 12 7-7 7 7"[39m
+                [36m/>[39m
+                [36m<path[39m
+                  [33md[39m=[32m"M12 19V5"[39m
+                [36m/>[39m
+              [36m</svg>[39m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"text-[11px] font-bold text-[var(--color-text-muted)] uppercase tracking-widest"[39m
+            [36m>[39m
+              [0mPreia[0m
+            [36m</span>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"flex-1 text-[20px] font-bold text-[var(--color-text-primary)] tabular-nums"[39m
+          [36m>[39m
+            [0m1.50[0m
+            [36m<span[39m
+              [33mclass[39m=[32m"text-sm font-medium text-[var(--color-text-secondary)] ml-0.5"[39m
+            [36m>[39m
+              [0mm[0m
+            [36m</span>[39m
+          [36m</div>[39m
+          [36m<div[39m
+            [33mclass[39m=[32m"flex flex-col items-end gap-1 shrink-0"[39m
+          [36m>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"text-[14px] font-semibold text-[var(--color-text-primary)] tabular-nums"[39m
+            [36m>[39m
+              [0m10:00[0m
+            [36m</span>[39m
+            [36m<span[39m
+              [33mclass[39m=[32m"bg-[var(--color-primary)] text-white text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-wider"[39m
+            [36m>[39m
+              [0mAgora[0m
+            [36m</span>[39m
+          [36m</div>[39m
+        [36m</div>[39m
+      [36m</div>[39m
+    [36m</section>[39m
+  [36m</div>[39m
+[36m</body>[39m
+ ❯ Object.getElementError node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/config.js:37:19
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+ ❯ node_modules/.pnpm/@testing-library+dom@10.4.1/node_modules/@testing-library/dom/dist/query-helpers.js:95:19
+ ❯ src/components/tide/TideTable.test.tsx:39:23
+     37|
+     38|         expect(screen.getByText('Eventos do Dia')).toBeInTheDocument()
+     39|         expect(screen.getByText(/0\.20\s?m/)).toBeInTheDocument()
+       |                       ^
+     40|         expect(screen.getByText(/1\.50\s?m/)).toBeInTheDocument()
+     41|         // Verifica se os rótulos Preia/Baixa estão corretos (match ca…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed | 7 passed (8)
+      Tests  2 failed | 70 passed (72)
+   Start at  19:16:09
+   Duration  7.58s (transform 1.48s, setup 7.05s, import 2.92s, tests 1.93s, environment 25.62s)
+
+[ELIFECYCLE] Test failed. See above for more details.

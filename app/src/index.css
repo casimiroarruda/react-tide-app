@@ -139,16 +139,24 @@ body {
 }
 
 @layer base {
+  :root {
+    --font-sans: system-ui, -apple-system, sans-serif;
+  }
+
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+
   html {
     @apply font-sans;
   }
-  button:not(:disabled), [role="button"]:not(:disabled) {
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
     cursor: pointer;
   }
 }

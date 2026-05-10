@@ -12,9 +12,8 @@ describe('TideTable', () => {
 
     it('deve exibir o estado de carregamento', () => {
         render(<TideTable loading={true} timezone="America/Sao_Paulo" />)
-        // O loading renderiza 4 skeletons (divs com bg-muted animate-pulse)
-        // Como não têm texto, podemos buscar pelo container ou classes
-        const skeletons = screen.getAllByRole('generic').filter(el => el.className.includes('bg-muted'))
+        // O loading renderiza 4 skeletons (divs com bg-gray-100 animate-pulse)
+        const skeletons = screen.getAllByRole('generic').filter(el => el.className.includes('bg-gray-100'))
         expect(skeletons.length).toBeGreaterThanOrEqual(4)
     })
 
@@ -36,8 +35,14 @@ describe('TideTable', () => {
         render(<TideTable tides={mockTides} timezone="America/Sao_Paulo" />)
         
         expect(screen.getByText('Eventos do Dia')).toBeInTheDocument()
-        expect(screen.getByText(/0\.20\s?m/)).toBeInTheDocument()
-        expect(screen.getByText(/1\.50\s?m/)).toBeInTheDocument()
+        // O texto "0.20 m" está dividido em dois nodes
+        expect(screen.getByText((content, element) => {
+            return element?.tagName.toLowerCase() === 'div' && content.includes('0.20') && element.textContent?.includes('m')
+        })).toBeInTheDocument()
+        expect(screen.getByText((content, element) => {
+            return element?.tagName.toLowerCase() === 'div' && content.includes('1.50') && element.textContent?.includes('m')
+        })).toBeInTheDocument()
+        
         // Verifica se os rótulos Preia/Baixa estão corretos (match case-insensitive)
         expect(screen.getByText(/baixa/i)).toBeInTheDocument()
         expect(screen.getByText(/preia/i)).toBeInTheDocument()

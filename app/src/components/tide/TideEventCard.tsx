@@ -12,75 +12,70 @@ interface TideEventCardProps {
 }
 
 /**
- * Card individual de um evento de maré (Preia ou Baixa).
- * Design:
- * - Badge "AGORA" se isNow
- * - Badge "PREIA" outline se isNextHigh
- * - Ícone ↑ / ↓ conforme tipo
+ * Linha de um evento de maré na lista vertical.
+ * Layout: [ícone + tipo] — [altura] — [horário + badge]
  */
-export function TideEventCard({
-    tide,
-    timezone,
-    isNow,
-    isNextHigh,
-}: TideEventCardProps) {
+export function TideEventCard({ tide, timezone, isNow, isNextHigh }: TideEventCardProps) {
     const isHigh = tide.type === 'HIGH'
     const timeLabel = formatTideTime(tide.time, timezone)
 
     return (
-        <div
-            className={cn(
-                'flex flex-col min-w-[110px] p-4 rounded-2xl border transition-all relative overflow-hidden',
-                isNow
-                    ? 'bg-[var(--color-primary-light)] border-[var(--color-primary)]'
-                    : 'bg-white border-border/60'
-            )}
-        >
-            {/* Badges */}
-            <div className="flex gap-1 mb-2 h-5">
-                {isNow && (
-                    <span className="bg-[var(--color-primary)] text-white text-[10px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider">
-                        Agora
-                    </span>
-                )}
-                {isNextHigh && !isNow && (
-                    <span className="border border-[var(--color-primary)] text-[var(--color-primary)] text-[10px] font-bold px-1.5 py-0.5 rounded uppercase tracking-wider">
-                        Preia
-                    </span>
-                )}
-            </div>
+        <div className={cn(
+            'flex items-center gap-3 px-4 py-3.5 rounded-xl border transition-colors',
+            isNow
+                ? 'bg-[var(--color-primary-light)] border-[var(--color-primary)]'
+                : 'bg-white border-gray-100 hover:border-gray-200',
+        )}>
 
-            {/* Ícone e Tipo */}
-            <div className="flex items-center gap-1 mb-1">
-                {isHigh ? (
-                    <ArrowUp className="w-4 h-4 text-[var(--color-primary)]" />
-                ) : (
-                    <ArrowDown className="w-4 h-4 text-[var(--color-text-secondary)]" />
-                )}
+            {/* Ícone + Tipo */}
+            <div className="flex items-center gap-2 w-[72px] shrink-0">
+                <span className={cn(
+                    'flex items-center justify-center w-7 h-7 rounded-full shrink-0',
+                    isHigh
+                        ? 'bg-[var(--color-primary-light)] text-[var(--color-primary)]'
+                        : 'bg-gray-100 text-[var(--color-text-secondary)]',
+                )}>
+                    {isHigh
+                        ? <ArrowUp className="w-3.5 h-3.5" />
+                        : <ArrowDown className="w-3.5 h-3.5" />}
+                </span>
                 <span className="text-[11px] font-bold text-[var(--color-text-muted)] uppercase tracking-widest">
                     {isHigh ? 'Preia' : 'Baixa'}
                 </span>
             </div>
 
             {/* Altura */}
-            <div className="text-[18px] font-bold text-[var(--color-text-primary)] mb-1">
-                {tide.height.toFixed(2)}m
+            <div className="flex-1 text-[20px] font-bold text-[var(--color-text-primary)] tabular-nums">
+                {tide.height.toFixed(2)}
+                <span className="text-sm font-medium text-[var(--color-text-secondary)] ml-0.5">m</span>
             </div>
 
-            {/* Horário */}
-            <div className="text-[13px] font-medium text-[var(--color-text-secondary)]">
-                {timeLabel}
+            {/* Horário + badge */}
+            <div className="flex flex-col items-end gap-1 shrink-0">
+                <span className="text-[14px] font-semibold text-[var(--color-text-primary)] tabular-nums">
+                    {timeLabel}
+                </span>
+                {isNow && (
+                    <span className="bg-[var(--color-primary)] text-white text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">
+                        Agora
+                    </span>
+                )}
+                {isNextHigh && !isNow && (
+                    <span className="border border-[var(--color-primary)] text-[var(--color-primary)] text-[9px] font-bold px-2 py-0.5 rounded uppercase tracking-wider">
+                        Próxima
+                    </span>
+                )}
             </div>
         </div>
     )
 }
 
 /**
- * Container para a lista horizontal de cards de maré.
+ * Container da lista vertical de eventos.
  */
 export function TideEventList({ children }: { children: React.ReactNode }) {
     return (
-        <div className="flex gap-3 px-6 py-4 overflow-x-auto no-scrollbar scroll-smooth">
+        <div className="flex flex-col gap-2 px-4 pb-2">
             {children}
         </div>
     )
