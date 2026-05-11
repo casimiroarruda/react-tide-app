@@ -5,6 +5,7 @@
 import {
     useState,
     useEffect,
+    useContext,
     type ReactNode,
 } from 'react'
 import { useGeolocation } from '@/hooks/useGeolocation'
@@ -45,4 +46,12 @@ export function LocationProvider({ children }: { children: ReactNode }) {
             {children}
         </LocationContext.Provider>
     )
+}
+
+export function useLocationContext() {
+    const context = useContext(LocationContext)
+    if (!context) {
+        throw new Error('useLocationContext must be used within a LocationProvider')
+    }
+    return context
 }

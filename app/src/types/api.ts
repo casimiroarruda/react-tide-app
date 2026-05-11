@@ -81,3 +81,22 @@ export type ApiState<T> =
     | { status: 'loading' }
     | { status: 'success'; data: T }
     | { status: 'error'; error: Error }
+
+export type SunEventType = 'SUNRISE' | 'SUNSET'
+
+export type TideTimelineEvent = {
+    kind: 'tide'
+    tide: Tide
+    isNow: boolean
+    isNextHigh: boolean
+    sortTime: number
+}
+
+export type SunTimelineEvent = {
+    kind: 'sun'
+    eventType: SunEventType
+    time: Date
+    sortTime: number
+}
+
+export type TimelineEvent = TideTimelineEvent | SunTimelineEvent

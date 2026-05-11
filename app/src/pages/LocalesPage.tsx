@@ -2,7 +2,7 @@
 import { useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { useLocationContext } from '@/hooks/useLocationContext'
+import { useLocationContext } from '@/contexts/LocationContext'
 import { useLocationSearch } from '@/hooks/useLocationSearch'
 import { useNearbyLocations } from '@/hooks/useNearbyLocations'
 import { useGeolocation } from '@/hooks/useGeolocation'

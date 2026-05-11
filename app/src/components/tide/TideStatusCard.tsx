@@ -1,7 +1,9 @@
 // src/components/tide/TideStatusCard.tsx
-// Indicador do estado atual da maré.
-// Usa régua vertical (conceito de "tide gauge" de porto) em vez de barra horizontal —
-// altura é um conceito vertical, mais intuitivo para o usuário.
+// Gauge vertical com:
+// - Background cor de areia (#EDD9A3)
+// - Fill de água em ciano
+// - Onda SVG animada na fronteira água/areia
+// - Marcador de posição atual
 
 import { useMemo, useEffect, useState } from 'react'
 import { getTideState, getTideProgress, getCurrentTideBounds } from '@/utils/tide'
@@ -11,9 +13,17 @@ type Props = {
     tides: Tide[]
 }
 
+// Cor de areia — aparece acima da linha d'água
+const SAND = '#EDD9A3'
+// Cor dos ticks da régua
+const TICK = 'rgba(160, 110, 40, 0.45)'
+// Cor da água
+const WATER = '#12C5D6'
+
 export function TideStatusCard({ tides }: Props) {
-    // Atualiza o "agora" a cada 60 segundos
     const [now, setNow] = useState(() => new Date())
+
+    // Atualiza a cada 60 segundos
     useEffect(() => {
         const id = setInterval(() => setNow(new Date()), 60_000)
         return () => clearInterval(id)
@@ -24,9 +34,10 @@ export function TideStatusCard({ tides }: Props) {
     const bounds = useMemo(() => getCurrentTideBounds(tides, now), [tides, now])
 
     const isRising = state.status === 'rising'
-
-    // Altura do fill em % (0 = fundo, 100 = topo)
     const fillPercent = Math.round(progress * 100)
+
+    // Velocidade da animação: maré subindo → mais agitada; descendo → mais calma
+    const waveSpeed = isRising ? '2s' : '3.5s'
 
     return (
         <div className="mx-4 rounded-2xl bg-white border border-gray-100 shadow-sm overflow-hidden">
@@ -45,7 +56,7 @@ export function TideStatusCard({ tides }: Props) {
                     </p>
                 </div>
 
-                {/* Badge subindo/descendo */}
+                {/* Badge subindo / descendo */}
                 <div className={[
                     'flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold',
                     isRising
@@ -65,52 +76,97 @@ export function TideStatusCard({ tides }: Props) {
                 </div>
             </div>
 
-            {/* Gauge + labels */}
+            {/* Gauge + info */}
             <div className="flex items-stretch gap-4 px-4 pb-4">
 
-                {/* Régua vertical — tide gauge */}
-                <div className="flex flex-col items-center gap- shrink-0 min-w-[20vw]">
-                    {/* Label topo */}
+                {/* ── Régua vertical ── */}
+                <div className="flex flex-col items-center gap-1 shrink-0 min-w-[140px]">
                     <span className="text-[9px] font-semibold uppercase tracking-widest text-[var(--color-text-muted)]">
                         Preia
                     </span>
 
-                    {/* Coluna da régua */}
-                    <div className="relative flex-4 w-6 min-h-[80px] min-w-[15vw]">
-                        {/* Trilho de fundo — linhas horizontais estilo régua de porto */}
-                        <div className="absolute inset-0 rounded-lg bg-gray-100 overflow-hidden">
-                            {/* Linhas de graduação */}
-                            {[0, 25, 50, 75, 100].map((pct) => (
+                    {/* Coluna principal */}
+                    <div className="relative w-7 flex-1 min-h-[90px] min-w-[120px]">
+
+                        {/* Fundo areia */}
+                        <div
+                            className="absolute inset-0 rounded-lg overflow-hidden"
+                            style={{ background: SAND }}
+                        >
+                            {/* Marcas de graduação (régua de porto) */}
+                            {[0.2, 0.4, 0.6, 0.8].map((pct) => (
                                 <div
                                     key={pct}
-                                    className="absolute left-0 right-0 h-px bg-gray-200"
-                                    style={{ bottom: `${pct}%` }}
+                                    className="absolute right-0"
+                                    style={{
+                                        bottom: `${pct * 100}%`,
+                                        width: pct % 0.4 === 0 ? '55%' : '35%',
+                                        height: 1,
+                                        background: TICK,
+                                    }}
                                 />
                             ))}
                         </div>
 
-                        {/* Fill da água */}
+                        {/* Fill de água (sem border-radius no topo — onda cuida disso) */}
                         <div
-                            className="absolute bottom-0 left-0 right-0 rounded-lg transition-all duration-1000"
+                            className="absolute bottom-0 left-0 right-0 transition-all duration-1000"
                             style={{
                                 height: `${fillPercent}%`,
-                                background: 'linear-gradient(to top, var(--color-primary-dark), var(--color-primary))',
-                                opacity: 0.85,
+                                background: WATER,
+                                borderRadius: '0 0 8px 8px',
                             }}
                         />
+
+                        {/* ── Onda animada na fronteira água/areia ── */}
+                        {fillPercent > 2 && fillPercent < 98 && (
+                            <div
+                                className="absolute left-0 right-0 overflow-hidden pointer-events-none"
+                                style={{
+                                    height: 10,
+                                    bottom: `calc(${fillPercent}% - 5px)`,
+                                    zIndex: 5,
+                                }}
+                            >
+                                {/*
+                  O div interno é 200% da largura do gauge (2× = 56px).
+                  O SVG tem viewBox 0 0 56 10 com 2 ciclos completos de onda.
+                  translateX(-50%) desloca exatamente 1 ciclo → loop contínuo.
+                */}
+                                <div
+                                    style={{
+                                        width: '200%',
+                                        height: '100%',
+                                        animation: `tide-wave-shift ${waveSpeed} linear infinite`,
+                                    }}
+                                >
+                                    <svg
+                                        viewBox="0 0 56 10"
+                                        preserveAspectRatio="none"
+                                        style={{ width: '100%', height: '100%', display: 'block' }}
+                                    >
+                                        {/* Onda: topo sinusoidal + preenchimento até base */}
+                                        <path
+                                            d="M0,5 Q7,1 14,5 Q21,9 28,5 Q35,1 42,5 Q49,9 56,5 L56,10 L0,10 Z"
+                                            fill={WATER}
+                                        />
+                                    </svg>
+                                </div>
+                            </div>
+                        )}
 
                         {/* Marcador da posição atual */}
                         <div
                             className="absolute left-1/2 -translate-x-1/2 transition-all duration-1000"
-                            style={{ bottom: `calc(${fillPercent}% - 6px)` }}
+                            style={{ bottom: `calc(${fillPercent}% - 6px)`, zIndex: 10 }}
                         >
-                            <div className="w-4 h-4 rounded-full bg-white border-2 border-[var(--color-primary)] shadow-md" />
+                            <div className="w-4 h-4 rounded-full bg-white border-2 border-[var(--color-primary)] shadow" />
                         </div>
 
-                        {/* Valor percentual discreto */}
+                        {/* Percentagem */}
                         <div
-                            className="absolute -right-6 transition-all duration-1000 pointer-events-none"
-                            style={{ bottom: `calc(${fillPercent}% - 7px)` }}
+                            className="absolute -right-5 transition-all duration-1000 pointer-events-none"
+                            style={{ bottom: `calc(${fillPercent}% - 7px)`, zIndex: 10 }}
                         >
                             <span className="text-[9px] font-bold text-[var(--color-primary)]">
                                 {fillPercent}%
@@ -118,7 +174,6 @@ export function TideStatusCard({ tides }: Props) {
                         </div>
                     </div>
 
-                    {/* Label base */}
                     <span className="text-[9px] font-semibold uppercase tracking-widest text-[var(--color-text-muted)]">
                         Baixa
                     </span>
@@ -127,9 +182,8 @@ export function TideStatusCard({ tides }: Props) {
                 {/* Separador */}
                 <div className="w-px bg-gray-100 self-stretch mx-1" />
 
-                {/* Info da direita */}
+                {/* ── Info direita ── */}
                 <div className="flex-1 flex flex-col justify-between py-1 gap-3">
-                    {/* Preia (topo da régua) */}
                     <div className="flex items-center justify-between">
                         <div>
                             <p className="text-[10px] font-semibold uppercase tracking-widest text-[var(--color-text-muted)]">
@@ -143,10 +197,8 @@ export function TideStatusCard({ tides }: Props) {
                         <div className="w-2 h-2 rounded-full bg-[var(--color-primary)]" />
                     </div>
 
-                    {/* Nível médio do mar */}
                     <div className="h-px bg-gray-100" />
 
-                    {/* Baixa (base da régua) */}
                     <div className="flex items-center justify-between">
                         <div>
                             <p className="text-[10px] font-semibold uppercase tracking-widest text-[var(--color-text-muted)]">
